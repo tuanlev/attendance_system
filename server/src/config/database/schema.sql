@@ -47,15 +47,15 @@ CREATE TABLE IF NOT EXISTS employees (
   device_ex_id VARCHAR(255),
   status ENUM('active', 'inactive', 'leave') DEFAULT 'active',
   faceBase64 TEXT,
-  registered_at DATE DEFAULT CURRENT_DATE ,
+registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-CREATE TABLE IF NOT EXISTS checkins (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    external_id VARCHAR(255),
-    checkin_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    employee_ex_id VARCHAR(255)
-);
+-- CREATE TABLE IF NOT EXISTS checkins (
+-- 	id INT AUTO_INCREMENT PRIMARY KEY,
+--     external_id VARCHAR(255),
+--     checkin_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     employee_ex_id VARCHAR(255)
+-- );
 
 CREATE TABLE IF NOT EXISTS shift_assignments (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -63,6 +63,6 @@ CREATE TABLE IF NOT EXISTS shift_assignments (
     employee_id INT,
     position INT,
     department INT,
-    start_time DATE DEFAULT CURRENT_DATE,
-    end_time DATE DEFAULT CURRENT_DATE
+    start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+end_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
