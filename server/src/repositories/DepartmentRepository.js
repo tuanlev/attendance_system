@@ -17,6 +17,7 @@ exports.createDepartment = async (department) => {
         );
         return rows[0];
     } catch (error) {
+        if (error instanceof ErrorHandling) throw error
         throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
@@ -38,6 +39,7 @@ exports.findDepartmentById = async (id) => {
         );
         return rows[0] || null;
     } catch (error) {
+        if (error instanceof ErrorHandling) throw error
         throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
@@ -54,6 +56,7 @@ exports.getDepartments = async (keyword) => {
         const [rows] = await pool.query(query, params);
         return rows;
     } catch (error) {
+        if (error instanceof ErrorHandling) throw error
         throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
@@ -87,6 +90,7 @@ exports.updateDepartmentById = async (id, department) => {
         );
         return rows[0];
     } catch (error) {
+        if (error instanceof ErrorHandling) throw error
         throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
@@ -101,6 +105,7 @@ exports.deleteDepartmentById = async (id) => {
         }
         return { message: "Department deleted successfully" };
     } catch (error) {
+        if (error instanceof ErrorHandling) throw error
         throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
