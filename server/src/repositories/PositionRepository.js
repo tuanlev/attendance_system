@@ -1,5 +1,6 @@
 const { pool } = require('../config/Connection');
 const ErrorHandling = require('../ErrorHandling/ErrorHandling');
+const Position = require('../model/Position');
 const { ReasonPhrases, StatusCodes } = require('http-status-codes');
 
 exports.createPosition = async (position) => {
@@ -11,11 +12,12 @@ exports.createPosition = async (position) => {
             position
         );
         const [rows] = await pool.query(
-            'SELECT id, name, updated_at FROM positions WHERE id = :id',
-            { id: result.insertId }
+            'SELECT id, name, updated_at FROM positions WHERE id = ?',
+            [result.insertId]
         );
         return rows[0];
     } catch (error) {
+        if (error instanceof ErrorHandling) throw error
         throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
@@ -37,6 +39,7 @@ exports.findPositionById = async (id) => {
         );
         return rows[0] || null;
     } catch (error) {
+        if (error instanceof ErrorHandling) throw error
         throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
@@ -53,6 +56,7 @@ exports.getPositions = async (keyword) => {
         const [rows] = await pool.query(query, params);
         return rows;
     } catch (error) {
+        if (error instanceof ErrorHandling) throw error
         throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
@@ -86,6 +90,7 @@ exports.updatePositionById = async (id, position) => {
         );
         return rows[0];
     } catch (error) {
+        if (error instanceof ErrorHandling) throw error
         throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
@@ -100,6 +105,7 @@ exports.deletePositionById = async (id) => {
         }
         return { message: "Position deleted successfully" };
     } catch (error) {
+        if (error instanceof ErrorHandling) throw error
         throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };

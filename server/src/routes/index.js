@@ -2,7 +2,7 @@
 const routes = require("express").Router();
 
 routes.use("/departments", require("./DepartmentRoute"));
-// routes.use("/positions",positionRoute)
+routes.use("/positions",require("./PositionRoute"))
 // routes.use("/auth", require("./auth.route"));
 // routes.use("/users", require("./user.route"));
 // routes.use("/devices", require("./device.route"));
