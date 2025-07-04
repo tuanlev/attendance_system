@@ -6,28 +6,24 @@ exports.tokenAuthorizationLocalSuperadmin = async (req, res, next) => {
     if (token) {
         try {
             const user = jwtUtils.jwtDecoder(token);
-            if (user.role ==jwtUtils.Option.SUPDERADMIN) {
-                const userExist = systemUser.LoadSystemUserByUsername(user.username);
-                                    console.log(userExist)
-
+            if (user.role == jwtUtils.Option.ADMIN) {
+                const userExist = await userService.loadUserByName(user.username);
                 if (userExist?.username) {
-                    res.set('Authorization', jwtUtils.jwtEncoder(user, jwtUtils.Option.SUPDERADMIN));
+                    res.set('Authorization', jwtUtils.jwtEncoder(user, jwtUtils.Option.ADMIN));
                     req.isAuthenticated = true;
                     req.role = user.role;
                     console.log(userExist)
-                    next()
                 }
                 else {
-                        req.isAuthenticated = false;
-                        next()
+                    req.isAuthenticated = false;
 
                 }
             }
         } catch (e) {
             console.log("middleware" + e.message)
-            next()
         }
     }
-    req.isAuthenticated = false;
+    else
+        req.isAuthenticated = false;
     next()
 }

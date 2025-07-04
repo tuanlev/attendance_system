@@ -9,5 +9,6 @@ exports.login = async (loginInfo) => {
     if (!user || !passwordVerifier(loginData.password, user.password)) {
         throw new ErrorHandling(401, "Username or password is incorrect");
     }
+    console.log(user);
     return authDTO.authResponse(user);
 };

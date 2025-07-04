@@ -7,11 +7,11 @@ exports.createUser = async (user) => {
     if (check[0]) throw new ErrorHandling(StatusCodes.CONFLICT, "Username already exists");
     try {
         const [result] = await pool.query(
-            'INSERT INTO users (username, password, device_id, employee_id) VALUES (:username, :password, :device_id, :employee_id)',
+            'INSERT INTO users (username, password, device_id) VALUES (:username, :password, :device_id)',
             user
         );
         const [rows] = await pool.query(
-            'SELECT id, username, device_id, employee_id, updated_at FROM users WHERE id = :id',
+            'SELECT id, username,device_id, updated_at FROM users WHERE id = :id',
             { id: result.insertId }
         );
         return rows[0];
@@ -23,10 +23,10 @@ exports.createUser = async (user) => {
 exports.findUserByUsername = async (username) => {
     try {
         const [rows] = await pool.query(
-            'SELECT id, username FROM users WHERE username = :username',
+            'SELECT * FROM users WHERE username = :username',
             { username }
         );
-        return rows;
+        return rows[0];
     } catch (error) {
         throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
@@ -35,7 +35,7 @@ exports.findUserByUsername = async (username) => {
 exports.findUserById = async (id) => {
     try {
         const [rows] = await pool.query(
-            'SELECT id, username, device_id, employee_id, updated_at FROM users WHERE id = :id',
+            'SELECT id, username, device_id,  updated_at FROM users WHERE id = :id',
             { id }
         );
         return rows[0] || null;
@@ -46,7 +46,7 @@ exports.findUserById = async (id) => {
 
 exports.getUsers = async (keyword) => {
     try {
-        let query = 'SELECT id, username, device_id, employee_id, updated_at FROM users';
+        let query = 'SELECT id, username, device_id,  updated_at FROM users';
         let params = {};
         if (keyword && keyword.toString().trim()) {
             query += ' WHERE username LIKE :keyword';
@@ -79,7 +79,7 @@ exports.updateUserById = async (id, user) => {
             throw new ErrorHandling(StatusCodes.NOT_FOUND, "User not found");
         }
         const [rows] = await pool.query(
-            'SELECT id, username, device_id, employee_id, updated_at FROM users WHERE id = :id',
+            'SELECT id, username, device_id,  updated_at FROM users WHERE id = :id',
             { id }
         );
         return rows[0];
