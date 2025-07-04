@@ -1,8 +1,8 @@
 const Jwt = require("jsonwebtoken");
 const ErrorSecurityPattern = require("./ErrorSecurityPattern");
 exports.Option = {
-    ADMIN: 1,
-    SUPDERADMIN: 0
+    ADMIN: 'admin',
+    SUPDERADMIN: 'superadmin'
 }
 exports.jwtDecoder = (token) => {
     if (!token) {
@@ -28,9 +28,8 @@ exports.jwtDecoder = (token) => {
 exports.jwtEncoder = ({ deviceId, username }, options = this.Option.ADMIN) => {
     const data = {};
     data.username = username;
-    data.role = (options==this.Option.ADMIN)?'admin':'superadmin';
+    data.role = (options==this.Option.ADMIN)?options:this.Option.SUPDERADMIN;
     if (deviceId != undefined && options == this.Option.ADMIN) data.deviceId = deviceId;
-
     try {
         const token = Jwt.sign(data, process.env.JWT_SECRET, {
             expiresIn: '30minutes' // Token will expire in 30 minutes

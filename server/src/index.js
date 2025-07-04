@@ -5,6 +5,7 @@ const cors = require("cors");
 const { errorHandling } = require("./middleware/ErrorHandling");
 const authController = require("./controller/AuthController")
 const routes = require("./routes");
+const { tokenAuthorizationLocalSuperadmin } = require('./middleware/TokenAuthorizationLocalSuperadmin');
 const app = express();
 const server = require("http").createServer(app);
 // khởi tạo socket
@@ -17,6 +18,7 @@ app.use(cors({
   exposedHeaders: ['Authorization'] // 👈 cho phép frontend thấy header này
 }))
 // app.use(authorizeAdmin)
+app.use(tokenAuthorizationLocalSuperadmin);
 app.post("/login",authController.login)
 app.use("/api",routes)
 app.use(errorHandling)
