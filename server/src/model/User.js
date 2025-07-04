@@ -4,7 +4,6 @@ function User({ id, username, password, device_id, employee_id, updated_at }) {
     username,
     password,
     device_id,
-    employee_id,
     updated_at
   };
 }

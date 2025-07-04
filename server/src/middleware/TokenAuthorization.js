@@ -1,11 +1,4 @@
-const ErrorHandling = require("../ErrorHandling/ErrorHandling");
-
-exports.errorHandling = (err, req, res, next) => {
-    res.status((err instanceof ErrorHandling) ? err.status : 500).json({
-        success: false,
-        error: err.message
-    });
-};const jwtUtils = require("../security/JwtUtils");
+const jwtUtils = require("../security/JwtUtils");
 const userService = require("../service/UserServiceCustom")
 const SystemUser = require("../config/SystemUser")
 exports.tokenAuthorization = async (req, res, next) => {

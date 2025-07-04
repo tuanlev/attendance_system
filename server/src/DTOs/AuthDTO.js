@@ -1,4 +1,5 @@
 const { createErrorDto } = require('./ErrorDTOPattern');
+const PasswordHasing = require('../security/PasswordHashing')
 
 // DTO cho đăng nhập
 exports.loginQuery = ({ username, password }) => {
@@ -10,12 +11,12 @@ exports.loginQuery = ({ username, password }) => {
     }
     return {
         username: username.toString().trim(),
-        password: password.toString().trim()
+        password: PasswordHasing.passwordEncoder(password.toString().trim())
     };
 };
 
 // DTO cho đăng ký
-exports.registerQuery = ({ username, password, device_id, employee_id }) => {
+exports.registerQuery = ({ username, password, device_id }) => {
     if (!username || !username.toString().trim()) {
         throw createErrorDto('username');
     }
@@ -25,13 +26,13 @@ exports.registerQuery = ({ username, password, device_id, employee_id }) => {
     // Có thể kiểm tra device_id, employee_id nếu cần
     return {
         username: username.toString().trim(),
-        password: password.toString().trim(),
+        password: PasswordHasing.passwordEncoder(password.toString().trim()),
         device_id,
         employee_id
     };
 };
 
 // Response cho auth (ví dụ trả về token)
-exports.authResponse = ({ id, username, token }) => {
-    return { id, username, token };
+exports.authResponse = ({ username, role}) => {
+    return { username, role:(role)?role:'superadmin'};
 };

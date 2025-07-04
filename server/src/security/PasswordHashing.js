@@ -5,5 +5,6 @@ exports.passwordEncoder = (password) => {
 };
 
 exports.passwordVerifier = (password, hash) => {
-    return this.passwordEncoder(password) == hash;
+    console.log(password,hash,)
+    return password == hash;
 };

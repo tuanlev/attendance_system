@@ -3,6 +3,7 @@ require('./config/Connection')
 const express = require("express");
 const cors = require("cors");
 const { errorHandling } = require("./middleware/ErrorHandling");
+const authController = require("./controller/AuthController")
 const routes = require("./routes");
 const app = express();
 const server = require("http").createServer(app);
@@ -16,6 +17,7 @@ app.use(cors({
   exposedHeaders: ['Authorization'] // 👈 cho phép frontend thấy header này
 }))
 // app.use(authorizeAdmin)
+app.post("/login",authController.login)
 app.use("/api",routes)
 app.use(errorHandling)
 server.listen(process.env.PORT || 3000, () => {
