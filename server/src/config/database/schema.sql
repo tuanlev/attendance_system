@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS employees (
   fullname VARCHAR(255) NOT NULL DEFAULT 'new employee',
   phone VARCHAR(50),
   email VARCHAR(255),
-  shifts_id INT,
+  shift_id INT,
   department_id INT,
   position_id INT,
   device_id VARCHAR(255),

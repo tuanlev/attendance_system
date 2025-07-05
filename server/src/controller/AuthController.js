@@ -2,11 +2,12 @@ const jwtUtils = require("../security/JwtUtils");
 const authService = require("../service/AuthService")
 const SystemUser = require("../config/SystemUser");
 const ErrorHandling = require("../ErrorHandling/ErrorHandling");
+const { tokenAuthorizationLocalSuperadmin } = require("../middleware/TokenAuthorizationLocalSuperadmin");
 
-exports.login = async (req, res, next) => {
+exports.login =[tokenAuthorizationLocalSuperadmin, async (req, res, next) => {
     try {
         const data = await authService.login(req.body);
-        res.set('Authorization', jwtUtils.jwtEncoder(data, jwtUtils.Option.SUPDERADMIN));
+        res.set('Authorization', await jwtUtils.jwtEncoder(data, jwtUtils.Option.SUPDERADMIN));
         res.status(200).json({
             success: true,
             data:data
@@ -14,4 +15,4 @@ exports.login = async (req, res, next) => {
     } catch (e) {
         next(e)
     }
-}
+}]

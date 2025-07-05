@@ -1,10 +1,6 @@
 const EmployeeService = require('../service/EmployeeService');
 const { StatusCodes } = require('http-status-codes');
 const ErrorHandling = require('../ErrorHandling/ErrorHandling');
-
-const DEFAULT_DEVICE_ID = 5;
-
-// Thêm employee mới
 exports.addEmployee = async (req, res, next) => {
     try {
         if (!req.isAuthenticated && req.role != require("../security/JwtUtils").Option.ADMIN)

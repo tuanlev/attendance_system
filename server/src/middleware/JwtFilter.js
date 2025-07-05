@@ -1,9 +1,10 @@
 const jwtUtils = require("../security/JwtUtils");
 const userService = require("../service/UserServiceCustom")
-const SystemUser = require("../config/SystemUser")
+const SystemUser = require("../config/SystemUser");
+const { loginQuery } = require("../DTOs/AuthDTO");
 exports.JwtFilter = async (req, res, next) => {
     try {
-        const 
+        const loginQuery = loginQuery(req.body) 
     } catch (e) {
         console.log(e.message);
         next();
@@ -17,7 +18,7 @@ exports.JwtFilter = async (req, res, next) => {
                     res.set('Authorization', jwtUtils.jwtEncoder(user, jwtUtils.Option.ADMIN));
                     req.isAuthenticated = true;
                     req.role = jwtUtils.Option.ADMIN
-                    req.grantedAuthority = user.deviceId;
+                    req.grantedAuthority = user.device_id;
                     next()
                 }
                 else {

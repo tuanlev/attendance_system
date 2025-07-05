@@ -1,11 +1,11 @@
 const jwtUtils = require("../security/JwtUtils");
 const userService = require("../service/UserServiceCustom")
-const systemUser = require("../config/SystemUser")
-exports.tokenAuthorizationLocalSuperadmin = async (req, res, next) => {
+exports.tokenAuthorization = async (req, res, next) => {
     let token = req.get("Authorization");
     if (token) {
         try {
             const user = jwtUtils.jwtDecoder(token);
+            console.log(user)
             if (user.role == jwtUtils.Option.ADMIN) {
                 const userExist = await userService.loadUserByName(user.username);
                 if (userExist?.username) {
@@ -13,7 +13,6 @@ exports.tokenAuthorizationLocalSuperadmin = async (req, res, next) => {
                     req.isAuthenticated = true;
                     req.role = user.role;
                     req.grantedAuthority = user.device_id;
-                    console.log(userExist)
                 }
                 else {
                     req.isAuthenticated = false;
@@ -21,7 +20,7 @@ exports.tokenAuthorizationLocalSuperadmin = async (req, res, next) => {
                 }
             }
         } catch (e) {
-            console.log("middleware" + e.message)
+            console.log("middleware 1" + e.message)
         }
     }
     else

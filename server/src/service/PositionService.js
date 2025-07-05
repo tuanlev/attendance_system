@@ -1,8 +1,7 @@
 const positionDTO = require('../DTOs/PositionDTO');
-const { errorHandling } = require('../middleware/ErrorHandling');
-const positionRepository = require('../repositories/PositionRepository')
+const ErrorHandling = require('../ErrorHandling/ErrorHandling');
 const { StatusCodes } = require('http-status-codes');
-
+const positionRepository = require('../repositories/PositionRepository')
 //arg thường là cả req.body
 exports.addPosition = async (position) => {
     //positionQuery sẽ lấy những trường cần thiết trong req.body để truyền vào
@@ -17,16 +16,16 @@ exports.getPositions = async ({ keyword }) => {
 //arg là (req.params, req.body)
 exports.updatePositionById = async ({ positionId }, position) => {
     if (positionId === undefined || positionId === null)
-        throw new errorHandling(StatusCodes.BAD_REQUEST, "positionId is required");
+        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "positionId is required");
     return positionDTO.positionResponse(await positionRepository.updatePositionById(positionId, positionDTO.positionQuery(position)));
 } 
 exports.getPositionById = async ({ positionId }) => {
     if (positionId === undefined || positionId === null)
-        throw new errorHandling(StatusCodes.BAD_REQUEST, "positionId is required");
+        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "positionId is required");
     return positionDTO.positionResponse(await positionRepository.findPositionById(positionId));
 } 
 exports.deletePositionById = async ({ positionId }) => {
     if (positionId === undefined || positionId === null)
-        throw new errorHandling(StatusCodes.BAD_REQUEST, "positionId is required");
+        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "positionId is required");
     return positionDTO.positionResponse(await positionRepository.deletePositionById(positionId));
 } 

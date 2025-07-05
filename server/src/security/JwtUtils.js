@@ -15,7 +15,7 @@ exports.jwtDecoder = (token) => {
         return (data.role == this.Option.ADMIN) ? {
             role: data.role,
             username: data.username,
-            deviceId: data.deviceId
+            device_id: data.device_id
         } : {
             role: data.role,
             username: data.username
@@ -25,11 +25,11 @@ exports.jwtDecoder = (token) => {
 
     }
 }
-exports.jwtEncoder = ({ deviceId, username }, options = this.Option.ADMIN) => {
+exports.jwtEncoder = ({ device_id, username }, options = this.Option.ADMIN) => {
     const data = {};
     data.username = username;
     data.role = (options==this.Option.ADMIN)?options:this.Option.SUPDERADMIN;
-    if (deviceId != undefined && options == this.Option.ADMIN) data.deviceId = deviceId;
+    if (device_id != undefined && options == this.Option.ADMIN) data.device_id = device_id;
     try {
         const token = Jwt.sign(data, process.env.JWT_SECRET, {
             expiresIn: '30minutes' // Token will expire in 30 minutes

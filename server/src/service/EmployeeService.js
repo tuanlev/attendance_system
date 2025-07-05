@@ -6,6 +6,7 @@ const ErrorHandling = require('../ErrorHandling/ErrorHandling');
 // Thêm employee mới
 exports.addEmployee = async (employee, device_id) => {
     // employeeQuery sẽ kiểm tra và chuẩn hóa dữ liệu đầu vào
+    if (!device_id) throw new Error('you dont have role in any device')
     const employeeData = employeeDTO.employeeQuery({ ...employee, device_id });
     const created = await employeeRepository.createEmployee(employeeData, device_id);
     return employeeDTO.employeeResponse(created);

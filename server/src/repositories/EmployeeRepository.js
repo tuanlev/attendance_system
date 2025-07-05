@@ -16,7 +16,7 @@ exports.createEmployee = async (employee, device_id) => {
         const [result] = await pool.query(
             `INSERT INTO employees 
             (external_id, fullname, phone, email, department_id, position_id,shift_id, device_id, status, faceBase64) 
-            VALUES (:external_id, :fullname, :phone, :email, :department_id, :position_id, :device_id, :status, :faceBase64)`,
+            VALUES (:external_id, :fullname, :phone, :email, :department_id, :position_id,:shift_id, :device_id, :status, :faceBase64)`,
             { ...employee, device_id }
         );
         const [rows] = await pool.query(

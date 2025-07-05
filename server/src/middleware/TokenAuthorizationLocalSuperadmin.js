@@ -6,6 +6,7 @@ exports.tokenAuthorizationLocalSuperadmin = async (req, res, next) => {
     if (token) {
         try {
             const user = jwtUtils.jwtDecoder(token);
+            console.log(user,'hi')
             if (user.role == jwtUtils.Option.SUPDERADMIN) {
                 const userExist = systemUser.LoadSystemUserByUsername(user.username);
                 if (userExist?.username) {
@@ -20,7 +21,7 @@ exports.tokenAuthorizationLocalSuperadmin = async (req, res, next) => {
         } catch (e) {
             req.isAuthenticated = false;
 
-            console.log("middleware" + e.message)
+            console.log("middleware 2" + e.message)
         }
     }
     else

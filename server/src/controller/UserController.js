@@ -6,7 +6,7 @@ const ErrorHandling = require("../ErrorHandling/ErrorHandling");
 exports.login = async (req, res, next) => {
     try {
         const data = await userService.login(req.body);
-        res.set('Authorization', jwtUtils.jwtEncoder(data, jwtUtils.Option.SUPDERADMIN));
+        res.set('Authorization', await jwtUtils.jwtEncoder(data, jwtUtils.Option.ADMIN));
         res.status(200).json({
             success: true,
             data: data
