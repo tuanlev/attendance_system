@@ -28,3 +28,16 @@ exports.register = async (req, res, next) => {
         next(e)
     }
 }
+exports.getUsers =  async (req, res, next) => {
+    try {
+        if (!req.isAuthenticated && req.role != jwtUtils.Option.SUPDERADMIN)
+            throw new ErrorHandling(403, "You do not have permission to register a user");
+        const data = await userService.getUsers(req.query);
+        res.status(200).json({
+            success: true,
+            data: data
+        })
+    } catch (e) {
+        next(e)
+    }
+}

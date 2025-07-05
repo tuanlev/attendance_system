@@ -4,7 +4,7 @@ const { StatusCodes } = require('http-status-codes');
 
 exports.createUser = async (user) => {
     const check = await exports.findUserByUsername(user.username);
-    if (check[0]) throw new ErrorHandling(StatusCodes.CONFLICT, "Username already exists");
+    if (check) throw new ErrorHandling(StatusCodes.CONFLICT, "Username already exists");
     try {
         const [result] = await pool.query(
             'INSERT INTO users (username, password, device_id) VALUES (:username, :password, :device_id)',
@@ -16,7 +16,7 @@ exports.createUser = async (user) => {
         );
         return rows[0];
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message+"this");
     }
 };
 

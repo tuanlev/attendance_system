@@ -4,7 +4,7 @@ const Position = require('../model/Position');
 const { ReasonPhrases, StatusCodes } = require('http-status-codes');
 
 exports.createPosition = async (position) => {
-    const check = await exports.findPositionByName(position.name);
+    const check = await this.findPositionByName(position.name);
     if (check[0]) throw new ErrorHandling(StatusCodes.CONFLICT, "Position name already exists");
     try {
         const [result] = await pool.query(
@@ -18,7 +18,7 @@ exports.createPosition = async (position) => {
         return rows[0];
     } catch (error) {
         if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message+'this');
     }
 };
 

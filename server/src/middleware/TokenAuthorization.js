@@ -12,6 +12,7 @@ exports.tokenAuthorizationLocalSuperadmin = async (req, res, next) => {
                     res.set('Authorization', jwtUtils.jwtEncoder(user, jwtUtils.Option.ADMIN));
                     req.isAuthenticated = true;
                     req.role = user.role;
+                    req.grantedAuthority = user.device_id;
                     console.log(userExist)
                 }
                 else {
