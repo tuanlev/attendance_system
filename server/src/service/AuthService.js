@@ -5,7 +5,7 @@ const { passwordVerifier } = require('../security/PasswordHashing');
 const ErrorHandling = require('../ErrorHandling/ErrorHandling');
 exports.login = async (loginInfo) => {
     const loginData = authDTO.loginQuery(loginInfo);
-    const user = systemUser.LoadSystemUserByUsername(loginData.username);
+    const user = await systemUser.LoadSystemUserByUsername(loginData.username);
     if (!user || !passwordVerifier(loginData.password, user.password)) {
         throw new ErrorHandling(401, "Username or password is incorrect");
     }

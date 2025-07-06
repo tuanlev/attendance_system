@@ -15,18 +15,18 @@ exports.getDepartments = async ({ keyword }) => {
 }
 
 //arg là (req.params, req.body)
-exports.updateDepartmentById = async ({ departmentId }, department) => {
-    if (departmentId === undefined || departmentId === null)
-        throw new errorHandling(StatusCodes.BAD_REQUEST, "departmentId is required");
-    return departmentDTO.departmentResponse(await departmentRepository.updateDepartmentById(departmentId, departmentDTO.departmentQuery(department)));
+exports.updateDepartmentById = async ({ department_id }, department) => {
+    if (department_id === undefined || department_id === null)
+        throw new errorHandling(StatusCodes.BAD_REQUEST, "department_id is required");
+    return departmentDTO.departmentResponse(await departmentRepository.updateDepartmentById(department_id, departmentDTO.departmentQuery(department)));
 } 
-exports.getDepartmentById = async ({ departmentId }) => {
-    if (departmentId === undefined || departmentId === null)
-        throw new errorHandling(StatusCodes.BAD_REQUEST, "departmentId is required");
-    return departmentDTO.departmentResponse(await departmentRepository.findDepartmentById(departmentId));
+exports.getDepartmentById = async ({ department_id }) => {
+    if (department_id === undefined || department_id === null)
+        throw new errorHandling(StatusCodes.BAD_REQUEST, "department_id is required");
+    return departmentDTO.departmentResponse(await departmentRepository.findDepartmentById(department_id));
 } 
-exports.deleteDepartmentById = async ({ departmentId }) => {
-    if (departmentId === undefined || departmentId === null)
-        throw new errorHandling(StatusCodes.BAD_REQUEST, "departmentId is required");
-    return departmentDTO.departmentResponse(await departmentRepository.deleteDepartmentById(departmentId));
+exports.deleteDepartmentById = async ({ department_id }) => {
+    if (department_id === undefined || department_id === null)
+        throw new errorHandling(StatusCodes.BAD_REQUEST, "department_id is required");
+    return departmentDTO.departmentResponse(await departmentRepository.deleteDepartmentById(department_id));
 } 

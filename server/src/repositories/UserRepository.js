@@ -1,6 +1,7 @@
 const { pool } = require('../config/Connection');
 const ErrorHandling = require('../ErrorHandling/ErrorHandling');
 const { StatusCodes } = require('http-status-codes');
+const { passwordEncoder } = require('../security/PasswordHashing');
 
 exports.createUser = async (user) => {
     const check = await exports.findUserByUsername(user.username);
@@ -74,6 +75,48 @@ exports.updateUserById = async (id, user) => {
         const [result] = await pool.query(
             'UPDATE users SET username = :username, password = :password, device_id = :device_id, employee_id = :employee_id WHERE id = :id',
             { ...user, id }
+        );
+        if (result.affectedRows === 0) {
+            throw new ErrorHandling(StatusCodes.NOT_FOUND, "User not found");
+        }
+        const [rows] = await pool.query(
+            'SELECT id, username, device_id,  updated_at FROM users WHERE id = :id',
+            { id }
+        );
+        return rows[0];
+    } catch (error) {
+        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
+};
+
+exports.resetPasswordUsersById = async (id) => {
+    try {
+        const pw = process.env.PASSWORD_RESET || '12345678';
+        const hashpassword = passwordEncoder(pw);
+        const [result] = await pool.query(
+            'UPDATE users SET password = :password WHERE id = :id',
+            { password:hashpassword,id }
+        );
+        if (result.affectedRows === 0) {
+            throw new ErrorHandling(StatusCodes.NOT_FOUND, "User not found");
+        }
+        const [rows] = await pool.query(
+            'SELECT id, username, device_id,  updated_at FROM users WHERE id = :id',
+            { id }
+        );
+        return rows[0];
+    } catch (error) {
+        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
+};
+exports.changeDeviceUser = async (id,device_id) => {
+    try {
+        device_id = (device_id)?device_id:null;
+        const pw = process.env.PASSWORD_RESET || '12345678';
+        const hashpassword = passwordEncoder(pw);
+        const [result] = await pool.query(
+            'UPDATE users SET device_id = :device_id WHERE id = :id',
+            { device_id,id }
         );
         if (result.affectedRows === 0) {
             throw new ErrorHandling(StatusCodes.NOT_FOUND, "User not found");

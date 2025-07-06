@@ -3,8 +3,8 @@ const positionController = require("../controller/PositionController");
 const positionRoute = require("express").Router();
 positionRoute.get("/",positionController.getPositions);
 positionRoute.post("/",positionController.addPosition)
-positionRoute.patch("/:positionId",positionController.updatePosition)
-positionRoute.get("/:positionId",positionController.getPositionById)
-positionRoute.delete("/:positionId",positionController.deletePosition)
+positionRoute.patch("/:position_id",positionController.updatePosition)
+positionRoute.get("/:position_id",positionController.getPositionById)
+positionRoute.delete("/:position_id",positionController.deletePosition)
 
 module.exports = positionRoute;

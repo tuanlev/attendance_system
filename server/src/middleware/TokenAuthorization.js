@@ -1,29 +1,29 @@
 const jwtUtils = require("../security/JwtUtils");
 const userService = require("../service/UserServiceCustom")
+const systemUser = require("../config/SystemUser")
 exports.tokenAuthorization = async (req, res, next) => {
     let token = req.get("Authorization");
     if (token) {
         try {
             const user = jwtUtils.jwtDecoder(token);
-            console.log(user)
-            if (user.role == jwtUtils.Option.ADMIN) {
-                const userExist = await userService.loadUserByName(user.username);
-                if (userExist?.username) {
-                    res.set('Authorization', jwtUtils.jwtEncoder(user, jwtUtils.Option.ADMIN));
-                    req.isAuthenticated = true;
-                    req.role = user.role;
-                    req.grantedAuthority = user.device_id;
-                }
-                else {
-                    req.isAuthenticated = false;
-
-                }
+            if (user.role == jwtUtils.Option.SUPDERADMIN) {
+                res.set('Authorization', jwtUtils.jwtEncoder(user, jwtUtils.Option.SUPDERADMIN));
+                req.isAuthenticated = true;
+                req.grantedAuthority = user.role;
             }
-        } catch (e) {
-            console.log("middleware 1" + e.message)
-        }
-    }
-    else
+            else {
+                res.set('Authorization', jwtUtils.jwtEncoder(user, jwtUtils.Option.ADMIN));
+                req.isAuthenticated = true;
+                req.grantedAuthority = user.role;
+                req.device_id = user.device_id;
+            }
+        }catch (e) {
         req.isAuthenticated = false;
+        console.log("middleware 2" + e.message)
+        }
+        } 
+    else
+    req.isAuthenticated = false;
+    console.log(req.grantedAuthority)
     next()
 }

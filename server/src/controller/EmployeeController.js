@@ -3,7 +3,7 @@ const { StatusCodes } = require('http-status-codes');
 const ErrorHandling = require('../ErrorHandling/ErrorHandling');
 exports.addEmployee = async (req, res, next) => {
     try {
-        if (!req.isAuthenticated && req.role != require("../security/JwtUtils").Option.ADMIN)
+         if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
             throw new ErrorHandling(403, "You do not have permission");
         const data = await EmployeeService.addEmployee(req.body, req.grantedAuthority
         );
@@ -19,7 +19,7 @@ exports.addEmployee = async (req, res, next) => {
 // Lấy danh sách employees (có thể tìm kiếm theo tên, phòng ban, vị trí)
 exports.getEmployees = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated && req.role != require("../security/JwtUtils").Option.ADMIN)
+         if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
             throw new ErrorHandling(403, "You do not have permission");
         const data = await EmployeeService.getEmployees(req.query, req.grantedAuthority);
         res.status(StatusCodes.OK).json({
@@ -34,9 +34,9 @@ exports.getEmployees = async (req, res, next) => {
 // Lấy employee theo id
 exports.getEmployeeById = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated && req.role != require("../security/JwtUtils").Option.ADMIN)
+         if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
             throw new ErrorHandling(403, "You do not have permission");
-        const data = await EmployeeService.getEmployeeById({ employeeId: req.params.employeeId }, req.grantedAuthority);
+        const data = await EmployeeService.getEmployeeById({ employee_id: req.params.employee_id }, req.grantedAuthority);
         res.status(StatusCodes.OK).json({
             success: true,
             data
@@ -49,7 +49,7 @@ exports.getEmployeeById = async (req, res, next) => {
 // Lấy employee theo external_id
 exports.getEmployeeByExternalId = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated && req.role != require("../security/JwtUtils").Option.ADMIN)
+         if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
             throw new ErrorHandling(403, "You do not have permission");
         const data = await EmployeeService.getEmployeeByExternalId({ external_id: req.params.external_id }, req.grantedAuthority);
         res.status(StatusCodes.OK).json({
@@ -64,9 +64,9 @@ exports.getEmployeeByExternalId = async (req, res, next) => {
 // Cập nhật employee theo id
 exports.updateEmployeeById = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated && req.role != require("../security/JwtUtils").Option.ADMIN)
+         if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
             throw new ErrorHandling(403, "You do not have permission");
-        const data = await EmployeeService.updateEmployeeById({ employeeId: req.params.employeeId }, req.body, req.grantedAuthority);
+        const data = await EmployeeService.updateEmployeeById({ employee_id: req.params.employee_id }, req.body, req.grantedAuthority);
         res.status(StatusCodes.OK).json({
             success: true,
             message: "Update successful",
@@ -80,9 +80,9 @@ exports.updateEmployeeById = async (req, res, next) => {
 // Xóa employee theo id
 exports.deleteEmployeeById = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated && req.role != require("../security/JwtUtils").Option.ADMIN)
+         if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
             throw new ErrorHandling(403, "You do not have permission");
-        const result = await EmployeeService.deleteEmployeeById({ employeeId: req.params.employeeId }, req.grantedAuthority);
+        const result = await EmployeeService.deleteEmployeeById({ employee_id: req.params.employee_id }, req.grantedAuthority);
         res.status(StatusCodes.OK).json({
             success: true,
             ...result

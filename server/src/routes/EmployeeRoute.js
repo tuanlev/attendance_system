@@ -4,9 +4,9 @@ const employeeRoute = require("express").Router();
 
 employeeRoute.get("/", employeeController.getEmployees);
 employeeRoute.post("/", employeeController.addEmployee);
-employeeRoute.get("/:employeeId", employeeController.getEmployeeById);
+employeeRoute.get("/:employee_id", employeeController.getEmployeeById);
 employeeRoute.get("/external/:external_id", employeeController.getEmployeeByExternalId);
-employeeRoute.patch("/:employeeId", employeeController.updateEmployeeById);
-employeeRoute.delete("/:employeeId", employeeController.deleteEmployeeById);
+employeeRoute.patch("/:employee_id", employeeController.updateEmployeeById);
+employeeRoute.delete("/:employee_id", employeeController.deleteEmployeeById);
 
 module.exports = employeeRoute;

@@ -4,8 +4,8 @@ const shiftRoute = require("express").Router();
 
 shiftRoute.get("/", shiftController.getShifts);
 shiftRoute.post("/", shiftController.addShift);
-shiftRoute.get("/:shiftId", shiftController.getShiftById);
-shiftRoute.patch("/:shiftId", shiftController.updateShiftById);
-shiftRoute.delete("/:shiftId", shiftController.deleteShiftById);
+shiftRoute.get("/:shift_id", shiftController.getShiftById);
+shiftRoute.patch("/:shift_id", shiftController.updateShiftById);
+shiftRoute.delete("/:shift_id", shiftController.deleteShiftById);
 
 module.exports = shiftRoute;

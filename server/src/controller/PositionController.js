@@ -1,8 +1,11 @@
 const positionSevice = require('../service/PositionService')
 const { StatusCodes } = require('http-status-codes');
+const ErrorHandling = require("../ErrorHandling/ErrorHandling");
+
 exports.addPosition = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated && req.role !=  require("../security/JwtUtils").Option.ADMIN)
+        
+         if (!req.isAuthenticated && req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
             throw new ErrorHandling(403, "You do not have permission");
         const result = await positionSevice.addPosition(req.body);
         res.status(StatusCodes.CREATED).json({
@@ -15,7 +18,7 @@ exports.addPosition = async (req, res, next) => {
 }
 exports.getPositions = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated && req.role !=  require("../security/JwtUtils").Option.ADMIN)
+         if (!req.isAuthenticated && req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
             throw new ErrorHandling(403, "You do not have permission");
         const result = await positionSevice.getPositions(req.query);
         res.status(StatusCodes.OK).json({
@@ -28,7 +31,7 @@ exports.getPositions = async (req, res, next) => {
 }
 exports.updatePosition = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated && req.role !=  require("../security/JwtUtils").Option.ADMIN)
+         if (!req.isAuthenticated && req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
             throw new ErrorHandling(403, "You do not have permission");
         const result = await positionSevice.updatePositionById(req.params, req.body);
         res.status(StatusCodes.CREATED).json({
@@ -41,7 +44,7 @@ exports.updatePosition = async (req, res, next) => {
 }
 exports.deletePosition = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated && req.role !=  require("../security/JwtUtils").Option.ADMIN)
+         if (!req.isAuthenticated && req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
             throw new ErrorHandling(403, "You do not have permission");
         const result = await positionSevice.deletePositionById(req.params);
         res.status(StatusCodes.OK).json({
@@ -55,7 +58,7 @@ exports.deletePosition = async (req, res, next) => {
 }
 exports.getPositionById = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated && req.role !=  require("../security/JwtUtils").Option.ADMIN)
+         if (!req.isAuthenticated && req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
                     throw new ErrorHandling(403, "You do not have permission");
         const result = await positionSevice.getPositionById(req.params);
         res.status(StatusCodes.OK).json({

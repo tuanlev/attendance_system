@@ -21,7 +21,6 @@ exports.login = async (loginInfo) => {
 };
 exports.register = async (registerInfo) => {
     const registerData = userDTO.registerQuery(registerInfo);
-        console.log(registerData)
 
     const user = await userRepository.createUser(registerData);
     return userDTO.userResponse(user);
@@ -37,4 +36,10 @@ exports.getUserById = async ({ user_id }) => {
 exports.deleteUserById = async ({ user_id }) => {
 
     return await userRepository.deleteUserById(user_id);;
+}
+exports.resetPasswordUsersById = async ({ user_id }) => {
+    return await userRepository.resetPasswordUsersById(user_id);;
+}
+exports.changeDeviceUser = async ({ user_id },{device_id}) => {
+    return userDTO.userResponse(await userRepository.changeDeviceUser(user_id,device_id));;
 }

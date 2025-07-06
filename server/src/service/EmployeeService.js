@@ -21,10 +21,10 @@ exports.getEmployees = async (searchParams, device_id) => {
 };
 
 // Lấy employee theo id
-exports.getEmployeeById = async ({ employeeId }, device_id) => {
-    if (employeeId === undefined || employeeId === null)
-        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "employeeId is required");
-    const employee = await employeeRepository.findEmployeeById(employeeId, device_id);
+exports.getEmployeeById = async ({ employee_id }, device_id) => {
+    if (employee_id === undefined || employee_id === null)
+        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "employee_id is required");
+    const employee = await employeeRepository.findEmployeeById(employee_id, device_id);
     if (!employee)
         throw new ErrorHandling(StatusCodes.NOT_FOUND, "Employee not found on this device");
     return employeeDTO.employeeResponse(employee);
@@ -41,17 +41,17 @@ exports.getEmployeeByExternalId = async ({ external_id }, device_id) => {
 };
 
 // Cập nhật employee theo id
-exports.updateEmployeeById = async ({ employeeId }, employee, device_id) => {
-    if (employeeId === undefined || employeeId === null)
-        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "employeeId is required");
+exports.updateEmployeeById = async ({ employee_id }, employee, device_id) => {
+    if (employee_id === undefined || employee_id === null)
+        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "employee_id is required");
     const employeeData = employeeDTO.employeeQuery({ ...employee, device_id });
-    const updated = await employeeRepository.updateEmployeeById(employeeId, employeeData, device_id);
+    const updated = await employeeRepository.updateEmployeeById(employee_id, employeeData, device_id);
     return employeeDTO.employeeResponse(updated);
 };
 
 // Xóa employee theo id
-exports.deleteEmployeeById = async ({ employeeId }, device_id) => {
-    if (employeeId === undefined || employeeId === null)
-        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "employeeId is required");
-    return await employeeRepository.deleteEmployeeById(employeeId, device_id);
+exports.deleteEmployeeById = async ({ employee_id }, device_id) => {
+    if (employee_id === undefined || employee_id === null)
+        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "employee_id is required");
+    return await employeeRepository.deleteEmployeeById(employee_id, device_id);
 };

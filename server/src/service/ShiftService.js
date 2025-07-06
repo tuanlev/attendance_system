@@ -18,27 +18,27 @@ exports.getShifts = async ({ keyword }) => {
 };
 
 // Lấy shift theo id
-exports.getShiftById = async ({ shiftId }) => {
-    if (shiftId === undefined || shiftId === null)
-        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "shiftId is required");
-    const shift = await shiftRepository.findShiftById(shiftId);
+exports.getShiftById = async ({ shift_id }) => {
+    if (shift_id === undefined || shift_id === null)
+        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "shift_id is required");
+    const shift = await shiftRepository.findShiftById(shift_id);
     if (!shift)
         throw new ErrorHandling(StatusCodes.NOT_FOUND, "Shift not found");
     return shiftDTO.shiftResponse(shift);
 };
 
 // Cập nhật shift theo id
-exports.updateShiftById = async ({ shiftId }, shift) => {
-    if (shiftId === undefined || shiftId === null)
-        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "shiftId is required");
+exports.updateShiftById = async ({ shift_id }, shift) => {
+    if (shift_id === undefined || shift_id === null)
+        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "shift_id is required");
     const shiftData = shiftDTO.shiftQuery(shift);
-    const updated = await shiftRepository.updateShiftById(shiftId, shiftData);
+    const updated = await shiftRepository.updateShiftById(shift_id, shiftData);
     return shiftDTO.shiftResponse(updated);
 };
 
 // Xóa shift theo id
-exports.deleteShiftById = async ({ shiftId }) => {
-    if (shiftId === undefined || shiftId === null)
-        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "shiftId is required");
-    return await shiftRepository.deleteShiftById(shiftId);
+exports.deleteShiftById = async ({ shift_id }) => {
+    if (shift_id === undefined || shift_id === null)
+        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "shift_id is required");
+    return await shiftRepository.deleteShiftById(shift_id);
 };

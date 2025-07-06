@@ -2,9 +2,8 @@ const jwtUtils = require("../security/JwtUtils");
 const authService = require("../service/AuthService")
 const SystemUser = require("../config/SystemUser");
 const ErrorHandling = require("../ErrorHandling/ErrorHandling");
-const { tokenAuthorizationLocalSuperadmin } = require("../middleware/TokenAuthorizationLocalSuperadmin");
 
-exports.login =[tokenAuthorizationLocalSuperadmin, async (req, res, next) => {
+exports.login =async (req, res, next) => {
     try {
         const data = await authService.login(req.body);
         res.set('Authorization', await jwtUtils.jwtEncoder(data, jwtUtils.Option.SUPDERADMIN));
@@ -15,4 +14,4 @@ exports.login =[tokenAuthorizationLocalSuperadmin, async (req, res, next) => {
     } catch (e) {
         next(e)
     }
-}]
+}

@@ -5,7 +5,6 @@ const cors = require("cors");
 const { errorHandling } = require("./middleware/ErrorHandling");
 const authController = require("./controller/AuthController")
 const routes = require("./routes");
-const { tokenAuthorizationLocalSuperadmin } = require('./middleware/TokenAuthorizationLocalSuperadmin');
 const { tokenAuthorization } = require('./middleware/TokenAuthorization');
 const app = express();
 const server = require("http").createServer(app);
@@ -20,8 +19,6 @@ app.use(cors({
 }))
 // app.use(authorizeAdmin)
 app.post("/login",authController.login)
-routes.use("/users", tokenAuthorizationLocalSuperadmin,require("./routes/UserRoute"));
-
 app.use(tokenAuthorization)
 app.use("/api",routes)
 app.use(errorHandling)
