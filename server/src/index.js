@@ -7,6 +7,9 @@ const authController = require("./controller/AuthController")
 const routes = require("./routes");
 const { tokenAuthorization } = require('./middleware/TokenAuthorization');
 const app = express();
+require('./config/mqtt').connect()
+require("./config/socket").initialize(server);
+
 const server = require("http").createServer(app);
 // khởi tạo socket
 // require("./config/socket").initialize(server);
