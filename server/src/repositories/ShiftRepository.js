@@ -1,5 +1,5 @@
 const { pool } = require('../config/Connection');
-const ErrorHandling = require('../ErrorHandling/ErrorHandling');
+const ErrorCustom = require('../errorcustom/ErrorCustom');
 const { StatusCodes } = require('http-status-codes');
 
 // Tạo shift mới
@@ -15,7 +15,7 @@ exports.createShift = async (shift) => {
         );
         return rows[0];
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -28,7 +28,7 @@ exports.findShiftByName = async (name) => {
         );
         return rows[0] || null;
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -41,7 +41,7 @@ exports.findShiftById = async (id) => {
         );
         return rows[0] || null;
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -58,7 +58,7 @@ exports.getShifts = async (keyword) => {
         const [rows] = await pool.query(query, params);
         return rows;
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -70,7 +70,7 @@ exports.updateShiftById = async (id, shift) => {
             { ...shift, id }
         );
         if (result.affectedRows === 0) {
-            throw new ErrorHandling(StatusCodes.NOT_FOUND, "Shift not found");
+            throw new ErrorCustom(StatusCodes.NOT_FOUND, "Shift not found");
         }
         const [rows] = await pool.query(
             'SELECT id, name, start_time, end_time, updated_at FROM shifts WHERE id = :id',
@@ -78,7 +78,7 @@ exports.updateShiftById = async (id, shift) => {
         );
         return rows[0];
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -90,10 +90,10 @@ exports.deleteShiftById = async (id) => {
             { id }
         );
         if (result.affectedRows === 0) {
-            throw new ErrorHandling(StatusCodes.NOT_FOUND, "Shift not found");
+            throw new ErrorCustom(StatusCodes.NOT_FOUND, "Shift not found");
         }
         return { message: "Shift deleted successfully" };
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };

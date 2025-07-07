@@ -1,3 +1,3 @@
-const ErrorHandling = require("../ErrorHandling/ErrorHandling");
+const ErrorCustom = require("../errorcustom/ErrorCustom");
 const { ReasonPhrases, StatusCodes } = require('http-status-codes');
-exports.createErrorDto = (field) => new ErrorHandling(StatusCodes.BAD_REQUEST, `${field} is required`);
+exports.createErrorDto = (field) => new ErrorCustom(StatusCodes.BAD_REQUEST, `${field} is required`);

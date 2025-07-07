@@ -8,9 +8,10 @@ const routes = require("./routes");
 const { tokenAuthorization } = require('./middleware/TokenAuthorization');
 const app = express();
 require('./config/mqtt').connect()
-require("./config/socket").initialize(server);
 
 const server = require("http").createServer(app);
+require("./config/socket").initialize(server);
+
 // khởi tạo socket
 // require("./config/socket").initialize(server);
 // require("./config/db")();

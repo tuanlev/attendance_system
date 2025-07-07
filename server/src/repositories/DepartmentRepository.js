@@ -1,11 +1,11 @@
 const { pool } = require('../config/Connection');
-const ErrorHandling = require('../ErrorHandling/ErrorHandling');
+const ErrorCustom = require('../errorcustom/ErrorCustom');
 const Department = require('../model/Department');
 const { ReasonPhrases, StatusCodes } = require('http-status-codes');
 
 exports.createDepartment = async (department) => {
     const check = await exports.findDepartmentByName(department.name);
-    if (check[0]) throw new ErrorHandling(StatusCodes.CONFLICT, "Department name already exists");
+    if (check[0]) throw new ErrorCustom(StatusCodes.CONFLICT, "Department name already exists");
     try {
         const [result] = await pool.query(
             'INSERT INTO departments (name) VALUES (:name)',
@@ -17,8 +17,8 @@ exports.createDepartment = async (department) => {
         );
         return rows[0];
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -27,7 +27,7 @@ exports.findDepartmentByName = async (name) => {
         const [rows] = await pool.query('SELECT id, name FROM departments WHERE name = ?', [name]);
         return rows;
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -39,8 +39,8 @@ exports.findDepartmentById = async (id) => {
         );
         return rows[0] || null;
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -56,8 +56,8 @@ exports.getDepartments = async (keyword) => {
         const [rows] = await pool.query(query, params);
         return rows;
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 exports.updateDepartmentById = async (id, department) => {
@@ -69,7 +69,7 @@ exports.updateDepartmentById = async (id, department) => {
                 { name: department.name, id }
             );
             if (check[0]) {
-                throw new ErrorHandling(StatusCodes.CONFLICT, "Department name already exists");
+                throw new ErrorCustom(StatusCodes.CONFLICT, "Department name already exists");
             }
         }
 
@@ -80,7 +80,7 @@ exports.updateDepartmentById = async (id, department) => {
         );
 
         if (result.affectedRows === 0) {
-            throw new ErrorHandling(StatusCodes.NOT_FOUND, "Department not found");
+            throw new ErrorCustom(StatusCodes.NOT_FOUND, "Department not found");
         }
 
         // Trả về thông tin phòng ban sau khi cập nhật
@@ -90,8 +90,8 @@ exports.updateDepartmentById = async (id, department) => {
         );
         return rows[0];
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 exports.deleteDepartmentById = async (id) => {
@@ -101,11 +101,11 @@ exports.deleteDepartmentById = async (id) => {
             { id }
         );
         if (result.affectedRows === 0) {
-            throw new ErrorHandling(StatusCodes.NOT_FOUND, "Department not found");
+            throw new ErrorCustom(StatusCodes.NOT_FOUND, "Department not found");
         }
         return { message: "Department deleted successfully" };
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };

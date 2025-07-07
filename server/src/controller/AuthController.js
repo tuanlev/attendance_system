@@ -1,7 +1,7 @@
 const jwtUtils = require("../security/JwtUtils");
 const authService = require("../service/AuthService")
 const SystemUser = require("../config/SystemUser");
-const ErrorHandling = require("../ErrorHandling/ErrorHandling");
+const ErrorCustom = require("../errorcustom/ErrorCustom");
 
 exports.login =async (req, res, next) => {
     try {

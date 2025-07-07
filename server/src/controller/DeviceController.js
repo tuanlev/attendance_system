@@ -1,11 +1,11 @@
 const deviceSevice = require('../service/DeviceService')
 const { StatusCodes } = require('http-status-codes');
-const ErrorHandling = require("../ErrorHandling/ErrorHandling");
+const ErrorCustom = require("../errorcustom/ErrorCustom");
 
 exports.addDevice = async (req, res, next) => {
     try {
          if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.SUPDERADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const result = await deviceSevice.addDevice(req.body);
         res.status(StatusCodes.CREATED).json({
             success: true,
@@ -18,7 +18,7 @@ exports.addDevice = async (req, res, next) => {
 exports.getDevices = async (req, res, next) => {
     try {
          if (!req.isAuthenticated)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const result = await deviceSevice.getDevices(req.query);
         res.status(StatusCodes.OK).json({
             success: true,
@@ -31,7 +31,7 @@ exports.getDevices = async (req, res, next) => {
 exports.updateDevice = async (req, res, next) => {
     try {
          if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.SUPDERADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const result = await deviceSevice.updateDeviceById(req.params, req.body);
         res.status(StatusCodes.CREATED).json({
             success: true,
@@ -44,7 +44,7 @@ exports.updateDevice = async (req, res, next) => {
 exports.deleteDevice = async (req, res, next) => {
     try {
          if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.SUPDERADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const result = await deviceSevice.deleteDeviceById(req.params);
         res.status(StatusCodes.OK).json({
             success: true,
@@ -58,7 +58,7 @@ exports.deleteDevice = async (req, res, next) => {
 exports.getDeviceById = async (req, res, next) => {
     try {
          if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.SUPDERADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const result = await deviceSevice.getDeviceById(req.params);
         res.status(StatusCodes.OK).json({
             success: true,

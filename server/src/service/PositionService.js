@@ -1,5 +1,5 @@
 const positionDTO = require('../DTOs/PositionDTO');
-const ErrorHandling = require('../ErrorHandling/ErrorHandling');
+const ErrorCustom = require('../errorcustom/ErrorCustom');
 const { StatusCodes } = require('http-status-codes');
 const positionRepository = require('../repositories/PositionRepository')
 //arg thường là cả req.body
@@ -16,16 +16,16 @@ exports.getPositions = async ({ keyword }) => {
 //arg là (req.params, req.body)
 exports.updatePositionById = async ({ position_id }, position) => {
     if (position_id === undefined || position_id === null)
-        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "position_id is required");
+        throw new ErrorCustom(StatusCodes.BAD_REQUEST, "position_id is required");
     return positionDTO.positionResponse(await positionRepository.updatePositionById(position_id, positionDTO.positionQuery(position)));
 } 
 exports.getPositionById = async ({ position_id }) => {
     if (position_id === undefined || position_id === null)
-        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "position_id is required");
+        throw new ErrorCustom(StatusCodes.BAD_REQUEST, "position_id is required");
     return positionDTO.positionResponse(await positionRepository.findPositionById(position_id));
 } 
 exports.deletePositionById = async ({ position_id }) => {
     if (position_id === undefined || position_id === null)
-        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "position_id is required");
+        throw new ErrorCustom(StatusCodes.BAD_REQUEST, "position_id is required");
     return positionDTO.positionResponse(await positionRepository.deletePositionById(position_id));
 } 

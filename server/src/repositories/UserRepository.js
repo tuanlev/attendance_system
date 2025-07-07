@@ -1,11 +1,11 @@
 const { pool } = require('../config/Connection');
-const ErrorHandling = require('../ErrorHandling/ErrorHandling');
+const ErrorCustom = require('../errorcustom/ErrorCustom');
 const { StatusCodes } = require('http-status-codes');
 const { passwordEncoder } = require('../security/PasswordHashing');
 
 exports.createUser = async (user) => {
     const check = await exports.findUserByUsername(user.username);
-    if (check) throw new ErrorHandling(StatusCodes.CONFLICT, "Username already exists");
+    if (check) throw new ErrorCustom(StatusCodes.CONFLICT, "Username already exists");
     try {
         const [result] = await pool.query(
             'INSERT INTO users (username, password, device_id) VALUES (:username, :password, :device_id)',
@@ -17,7 +17,7 @@ exports.createUser = async (user) => {
         );
         return rows[0];
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message+"this");
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message+"this");
     }
 };
 
@@ -29,7 +29,7 @@ exports.findUserByUsername = async (username) => {
         );
         return rows[0];
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -41,7 +41,7 @@ exports.findUserById = async (id) => {
         );
         return rows[0] || null;
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -57,7 +57,7 @@ exports.getUsers = async (keyword) => {
         const [rows] = await pool.query(query, params);
         return rows;
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -69,7 +69,7 @@ exports.updateUserById = async (id, user) => {
                 { username: user.username, id }
             );
             if (check[0]) {
-                throw new ErrorHandling(StatusCodes.CONFLICT, "Username already exists");
+                throw new ErrorCustom(StatusCodes.CONFLICT, "Username already exists");
             }
         }
         const [result] = await pool.query(
@@ -77,7 +77,7 @@ exports.updateUserById = async (id, user) => {
             { ...user, id }
         );
         if (result.affectedRows === 0) {
-            throw new ErrorHandling(StatusCodes.NOT_FOUND, "User not found");
+            throw new ErrorCustom(StatusCodes.NOT_FOUND, "User not found");
         }
         const [rows] = await pool.query(
             'SELECT id, username, device_id,  updated_at FROM users WHERE id = :id',
@@ -85,7 +85,7 @@ exports.updateUserById = async (id, user) => {
         );
         return rows[0];
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -98,7 +98,7 @@ exports.resetPasswordUsersById = async (id) => {
             { password:hashpassword,id }
         );
         if (result.affectedRows === 0) {
-            throw new ErrorHandling(StatusCodes.NOT_FOUND, "User not found");
+            throw new ErrorCustom(StatusCodes.NOT_FOUND, "User not found");
         }
         const [rows] = await pool.query(
             'SELECT id, username, device_id,  updated_at FROM users WHERE id = :id',
@@ -106,7 +106,7 @@ exports.resetPasswordUsersById = async (id) => {
         );
         return rows[0];
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 exports.changeDeviceUser = async (id,device_id) => {
@@ -119,7 +119,7 @@ exports.changeDeviceUser = async (id,device_id) => {
             { device_id,id }
         );
         if (result.affectedRows === 0) {
-            throw new ErrorHandling(StatusCodes.NOT_FOUND, "User not found");
+            throw new ErrorCustom(StatusCodes.NOT_FOUND, "User not found");
         }
         const [rows] = await pool.query(
             'SELECT id, username, device_id,  updated_at FROM users WHERE id = :id',
@@ -127,7 +127,7 @@ exports.changeDeviceUser = async (id,device_id) => {
         );
         return rows[0];
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -138,10 +138,10 @@ exports.deleteUserById = async (id) => {
             { id }
         );
         if (result.affectedRows === 0) {
-            throw new ErrorHandling(StatusCodes.NOT_FOUND, "User not found");
+            throw new ErrorCustom(StatusCodes.NOT_FOUND, "User not found");
         }
         return { message: "User deleted successfully" };
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };

@@ -1,15 +1,15 @@
-const ErrorHandling = require("../ErrorHandling/ErrorHandling");
+const ErrorCustom = require("../errorcustom/ErrorCustom");
 const { ReasonPhrases, StatusCodes } = require('http-status-codes');
 
 exports.unauthorizedError = (message="Unauthorized") => {
-    return new ErrorHandling(
+    return new ErrorCustom(
         StatusCodes.UNAUTHORIZED,
         message
         
     );
 };
 exports.forbiddenError = (message="Forbidden") => {
-    return new ErrorHandling(
+    return new ErrorCustom(
         StatusCodes.FORBIDDEN,
         message
         

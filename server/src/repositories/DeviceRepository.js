@@ -1,11 +1,11 @@
 const { pool } = require('../config/Connection');
-const ErrorHandling = require('../ErrorHandling/ErrorHandling');
+const ErrorCustom = require('../errorcustom/ErrorCustom');
 const Device = require('../model/Device');
 const { ReasonPhrases, StatusCodes } = require('http-status-codes');
 
 exports.createDevice = async (device) => {
     const check = await exports.findDeviceByName(device.name);
-    if (check[0]) throw new ErrorHandling(StatusCodes.CONFLICT, "Device name already exists");
+    if (check[0]) throw new ErrorCustom(StatusCodes.CONFLICT, "Device name already exists");
     try {
         const [result] = await pool.query(
             'INSERT INTO devices (external_id,name,description) VALUES (:external_id,:name, :description )',
@@ -17,8 +17,8 @@ exports.createDevice = async (device) => {
         );
         return rows[0];
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -27,7 +27,7 @@ exports.findDeviceByName = async (name) => {
         const [rows] = await pool.query('SELECT * FROM devices WHERE name = ?', [name]);
         return rows;
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -39,10 +39,23 @@ exports.findDeviceById = async (id) => {
         );
         return rows[0] || null;
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
+exports.getDeviceByExternal_id = async (external_id) => {
+    try {
+        const [rows] = await pool.query(
+            'SELECT * FROM devices WHERE external_id = :external_id',
+            { external_id }
+        );
+        return rows[0] || null;
+    } catch (error) {
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
+};
+
 
 exports.getDevices = async (keyword) => {
     try {
@@ -56,8 +69,8 @@ exports.getDevices = async (keyword) => {
         const [rows] = await pool.query(query, params);
         return rows;
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 exports.updateDeviceById = async (id, device) => {
@@ -69,7 +82,7 @@ exports.updateDeviceById = async (id, device) => {
                 { name: device.name, id }
             );
             if (check[0]) {
-                throw new ErrorHandling(StatusCodes.CONFLICT, "Device name already exists");
+                throw new ErrorCustom(StatusCodes.CONFLICT, "Device name already exists");
             }
         }
 
@@ -80,7 +93,7 @@ exports.updateDeviceById = async (id, device) => {
         );
 
         if (result.affectedRows === 0) {
-            throw new ErrorHandling(StatusCodes.NOT_FOUND, "Device not found");
+            throw new ErrorCustom(StatusCodes.NOT_FOUND, "Device not found");
         }
 
         // Trả về thông tin phòng ban sau khi cập nhật
@@ -90,8 +103,8 @@ exports.updateDeviceById = async (id, device) => {
         );
         return rows[0];
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 exports.deleteDeviceById = async (id) => {
@@ -101,11 +114,11 @@ exports.deleteDeviceById = async (id) => {
             { id }
         );
         if (result.affectedRows === 0) {
-            throw new ErrorHandling(StatusCodes.NOT_FOUND, "Device not found");
+            throw new ErrorCustom(StatusCodes.NOT_FOUND, "Device not found");
         }
         return { message: "Device deleted successfully" };
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };

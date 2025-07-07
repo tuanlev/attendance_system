@@ -1,11 +1,11 @@
 const departmentSevice = require('../service/DepartmentService')
 const { StatusCodes } = require('http-status-codes');
-const ErrorHandling = require("../ErrorHandling/ErrorHandling");
+const ErrorCustom = require("../errorcustom/ErrorCustom");
 
 exports.addDepartment = async (req, res, next) => {
     try {
          if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const result = await departmentSevice.addDepartment(req.body);
         res.status(StatusCodes.CREATED).json({
             success: true,
@@ -18,7 +18,7 @@ exports.addDepartment = async (req, res, next) => {
 exports.getDepartments = async (req, res, next) => {
     try {
          if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const result = await departmentSevice.getDepartments(req.query);
         res.status(StatusCodes.OK).json({
             success: true,
@@ -31,7 +31,7 @@ exports.getDepartments = async (req, res, next) => {
 exports.updateDepartment = async (req, res, next) => {
     try {
          if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const result = await departmentSevice.updateDepartmentById(req.params, req.body);
         res.status(StatusCodes.CREATED).json({
             success: true,
@@ -44,7 +44,7 @@ exports.updateDepartment = async (req, res, next) => {
 exports.deleteDepartment = async (req, res, next) => {
     try {
          if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const result = await departmentSevice.deleteDepartmentById(req.params);
         res.status(StatusCodes.OK).json({
             success: true,
@@ -58,7 +58,7 @@ exports.deleteDepartment = async (req, res, next) => {
 exports.getDepartmentById = async (req, res, next) => {
     try {
          if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const result = await departmentSevice.getDepartmentById(req.params);
         res.status(StatusCodes.OK).json({
             success: true,

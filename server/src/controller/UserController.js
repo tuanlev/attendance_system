@@ -1,7 +1,7 @@
 const jwtUtils = require("../security/JwtUtils");
 const authService = require("../service/AuthService")
 const userService = require("../service/UserServiceCustom");
-const ErrorHandling = require("../ErrorHandling/ErrorHandling");
+const ErrorCustom = require("../errorcustom/ErrorCustom");
 
 exports.login = async (req, res, next) => {
     try {
@@ -18,7 +18,7 @@ exports.login = async (req, res, next) => {
 exports.register = async (req, res, next) => {
     try {
         if (!req.isAuthenticated || req.grantedAuthority != jwtUtils.Option.SUPDERADMIN)
-            throw new ErrorHandling(403, "You do not have permission to register a user");
+            throw new ErrorCustom(403, "You do not have permission to register a user");
         const data = await userService.register(req.body);
         res.status(201).json({
             success: true,
@@ -31,7 +31,7 @@ exports.register = async (req, res, next) => {
 exports.getUsers =  async (req, res, next) => {
     try {
         if (!req.isAuthenticated || req.grantedAuthority != jwtUtils.Option.SUPDERADMIN)
-            throw new ErrorHandling(403, "You do not have permission to get users");
+            throw new ErrorCustom(403, "You do not have permission to get users");
         const data = await userService.getUsers(req.query);
         res.status(200).json({
             success: true,
@@ -44,7 +44,7 @@ exports.getUsers =  async (req, res, next) => {
 exports.resetPasswordUsers = async (req, res ,next) => {
      try {
         if (!req.isAuthenticated || req.grantedAuthority != jwtUtils.Option.SUPDERADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const data = await userService.resetPasswordUsersById(req.params);
         res.status(200).json({
             success: true,
@@ -57,7 +57,7 @@ exports.resetPasswordUsers = async (req, res ,next) => {
 exports.changeDeviceUser = async (req, res ,next) => {
      try {
         if (!req.isAuthenticated || req.grantedAuthority != jwtUtils.Option.SUPDERADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const data = await userService.changeDeviceUser(req.params,req.body);
         res.status(200).json({
             success: true,
@@ -70,7 +70,7 @@ exports.changeDeviceUser = async (req, res ,next) => {
 exports.deleteUser = async (req, res ,next) => {
      try {
         if (!req.isAuthenticated || req.grantedAuthority != jwtUtils.Option.SUPDERADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const data = await userService.deleteUserById(req.params);
         res.status(200).json({
             success: true,

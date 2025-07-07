@@ -1,7 +1,7 @@
 const shiftDTO = require('../DTOs/ShiftDTO');
 const shiftRepository = require('../repositories/ShiftRepository');
 const { StatusCodes } = require('http-status-codes');
-const ErrorHandling = require('../ErrorHandling/ErrorHandling');
+const ErrorCustom = require('../errorcustom/ErrorCustom');
 
 // Thêm shift mới
 exports.addShift = async (shift) => {
@@ -20,17 +20,17 @@ exports.getShifts = async ({ keyword }) => {
 // Lấy shift theo id
 exports.getShiftById = async ({ shift_id }) => {
     if (shift_id === undefined || shift_id === null)
-        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "shift_id is required");
+        throw new ErrorCustom(StatusCodes.BAD_REQUEST, "shift_id is required");
     const shift = await shiftRepository.findShiftById(shift_id);
     if (!shift)
-        throw new ErrorHandling(StatusCodes.NOT_FOUND, "Shift not found");
+        throw new ErrorCustom(StatusCodes.NOT_FOUND, "Shift not found");
     return shiftDTO.shiftResponse(shift);
 };
 
 // Cập nhật shift theo id
 exports.updateShiftById = async ({ shift_id }, shift) => {
     if (shift_id === undefined || shift_id === null)
-        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "shift_id is required");
+        throw new ErrorCustom(StatusCodes.BAD_REQUEST, "shift_id is required");
     const shiftData = shiftDTO.shiftQuery(shift);
     const updated = await shiftRepository.updateShiftById(shift_id, shiftData);
     return shiftDTO.shiftResponse(updated);
@@ -39,6 +39,6 @@ exports.updateShiftById = async ({ shift_id }, shift) => {
 // Xóa shift theo id
 exports.deleteShiftById = async ({ shift_id }) => {
     if (shift_id === undefined || shift_id === null)
-        throw new ErrorHandling(StatusCodes.BAD_REQUEST, "shift_id is required");
+        throw new ErrorCustom(StatusCodes.BAD_REQUEST, "shift_id is required");
     return await shiftRepository.deleteShiftById(shift_id);
 };

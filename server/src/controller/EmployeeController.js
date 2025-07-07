@@ -1,12 +1,14 @@
 const EmployeeService = require('../service/EmployeeService');
 const { StatusCodes } = require('http-status-codes');
-const ErrorHandling = require('../ErrorHandling/ErrorHandling');
+const ErrorCustom = require('../errorcustom/ErrorCustom');
+const { getDeviceById } = require('../service/DeviceService');
 exports.addEmployee = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
-        const data = await EmployeeService.addEmployee(req.body, req.grantedAuthority
-        );
+        if (!req.isAuthenticated || req.grantedAuthority != require("../security/JwtUtils").Option.ADMIN)
+            throw new ErrorCustom(403, "You do not have permission");
+        if (!req.access) throw new Error("no device found")
+        
+        const data = await EmployeeService.createEmployee(req.body, req.access);
         res.status(StatusCodes.CREATED).json({
             success: true,
             data
@@ -19,9 +21,10 @@ exports.addEmployee = async (req, res, next) => {
 // Lấy danh sách employees (có thể tìm kiếm theo tên, phòng ban, vị trí)
 exports.getEmployees = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
-        const data = await EmployeeService.getEmployees(req.query, req.grantedAuthority);
+        if (!req.isAuthenticated || req.grantedAuthority != require("../security/JwtUtils").Option.ADMIN)
+            throw new ErrorCustom(403, "You do not have permission");
+        if (!req.access) throw new Error("no device found")
+        const data = await EmployeeService.getEmployees(req.query, req.access);
         res.status(StatusCodes.OK).json({
             success: true,
             data
@@ -34,9 +37,10 @@ exports.getEmployees = async (req, res, next) => {
 // Lấy employee theo id
 exports.getEmployeeById = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
-        const data = await EmployeeService.getEmployeeById({ employee_id: req.params.employee_id }, req.grantedAuthority);
+        if (!req.isAuthenticated || req.grantedAuthority != require("../security/JwtUtils").Option.ADMIN)
+            throw new ErrorCustom(403, "You do not have permission");
+        if (!req.access) throw new Error("no device found")
+        const data = await EmployeeService.getEmployeeById(req.params.employee_id, req.access);
         res.status(StatusCodes.OK).json({
             success: true,
             data
@@ -49,9 +53,11 @@ exports.getEmployeeById = async (req, res, next) => {
 // Lấy employee theo external_id
 exports.getEmployeeByExternalId = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
-        const data = await EmployeeService.getEmployeeByExternalId({ external_id: req.params.external_id }, req.grantedAuthority);
+        if (!req.isAuthenticated || req.grantedAuthority != require("../security/JwtUtils").Option.ADMIN)
+            throw new ErrorCustom(403, "You do not have permission");
+        if (!req.access) throw new Error("no device found")
+
+        const data = await EmployeeService.getEmployeeByExternalId({ external_id: req.params.external_id }, req.access);
         res.status(StatusCodes.OK).json({
             success: true,
             data
@@ -64,9 +70,11 @@ exports.getEmployeeByExternalId = async (req, res, next) => {
 // Cập nhật employee theo id
 exports.updateEmployeeById = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
-        const data = await EmployeeService.updateEmployeeById({ employee_id: req.params.employee_id }, req.body, req.grantedAuthority);
+        if (!req.isAuthenticated || req.grantedAuthority != require("../security/JwtUtils").Option.ADMIN)
+            throw new ErrorCustom(403, "You do not have permission");
+        if (!req.access) throw new Error("no device found")
+             if (!req.params.employee_id) throw new Error("no employee_id found")
+        const data = await EmployeeService.updateEmployeeById( req.params.employee_id, {...req.body,device_id: req.access});
         res.status(StatusCodes.OK).json({
             success: true,
             message: "Update successful",
@@ -80,9 +88,11 @@ exports.updateEmployeeById = async (req, res, next) => {
 // Xóa employee theo id
 exports.deleteEmployeeById = async (req, res, next) => {
     try {
-         if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
-        const result = await EmployeeService.deleteEmployeeById({ employee_id: req.params.employee_id }, req.grantedAuthority);
+        if (!req.isAuthenticated || req.grantedAuthority != require("../security/JwtUtils").Option.ADMIN)
+            throw new ErrorCustom(403, "You do not have permission");
+        if (!req.access) throw new Error("no device found")
+
+        const result = await EmployeeService.deleteEmployeeById({ employee_id: req.params.employee_id }, req.access);
         res.status(StatusCodes.OK).json({
             success: true,
             ...result

@@ -17,16 +17,16 @@ exports.getDepartments = async ({ keyword }) => {
 //arg là (req.params, req.body)
 exports.updateDepartmentById = async ({ department_id }, department) => {
     if (department_id === undefined || department_id === null)
-        throw new errorHandling(StatusCodes.BAD_REQUEST, "department_id is required");
+        throw new ErrorCustom(StatusCodes.BAD_REQUEST, "department_id is required");
     return departmentDTO.departmentResponse(await departmentRepository.updateDepartmentById(department_id, departmentDTO.departmentQuery(department)));
 } 
 exports.getDepartmentById = async ({ department_id }) => {
     if (department_id === undefined || department_id === null)
-        throw new errorHandling(StatusCodes.BAD_REQUEST, "department_id is required");
+        throw new ErrorCustom(StatusCodes.BAD_REQUEST, "department_id is required");
     return departmentDTO.departmentResponse(await departmentRepository.findDepartmentById(department_id));
 } 
 exports.deleteDepartmentById = async ({ department_id }) => {
     if (department_id === undefined || department_id === null)
-        throw new errorHandling(StatusCodes.BAD_REQUEST, "department_id is required");
+        throw new ErrorCustom(StatusCodes.BAD_REQUEST, "department_id is required");
     return departmentDTO.departmentResponse(await departmentRepository.deleteDepartmentById(department_id));
 } 

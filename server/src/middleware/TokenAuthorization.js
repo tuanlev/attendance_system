@@ -1,6 +1,7 @@
 const jwtUtils = require("../security/JwtUtils");
 const userService = require("../service/UserServiceCustom")
-const systemUser = require("../config/SystemUser")
+const systemUser = require("../config/SystemUser");
+const { getDeviceById } = require("../service/DeviceService");
 exports.tokenAuthorization = async (req, res, next) => {
     let token = req.get("Authorization");
     if (token) {
@@ -15,7 +16,11 @@ exports.tokenAuthorization = async (req, res, next) => {
                 res.set('Authorization', jwtUtils.jwtEncoder(user, jwtUtils.Option.ADMIN));
                 req.isAuthenticated = true;
                 req.grantedAuthority = user.role;
-                req.device_id = user.device_id;
+                
+                req.access = user.device_id
+                console.log(req.access)
+                
+                
             }
         }catch (e) {
         req.isAuthenticated = false;
@@ -24,6 +29,5 @@ exports.tokenAuthorization = async (req, res, next) => {
         } 
     else
     req.isAuthenticated = false;
-    console.log(req.grantedAuthority)
     next()
 }

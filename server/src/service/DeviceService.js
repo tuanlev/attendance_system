@@ -17,16 +17,19 @@ exports.getDevices = async ({ keyword }) => {
 //arg là (req.params, req.body)
 exports.updateDeviceById = async ({ device_id }, device) => {
     if (device_id === undefined || device_id === null)
-        throw new errorHandling(StatusCodes.BAD_REQUEST, "device_id is required");
+        throw new ErrorCustom(StatusCodes.BAD_REQUEST, "device_id is required");
     return await deviceRepository.updateDeviceById(device_id, deviceDTO.deviceQuery(device));
 } 
 exports.getDeviceById = async ({ device_id }) => {
     if (device_id === undefined || device_id === null)
-        throw new errorHandling(StatusCodes.BAD_REQUEST, "device_id is required");
+        throw new ErrorCustom(StatusCodes.BAD_REQUEST, "device_id is required");
     return await deviceRepository.findDeviceById(device_id);
 }
 exports.deleteDeviceById = async ({ device_id }) => {
     if (device_id === undefined || device_id === null)
-        throw new errorHandling(StatusCodes.BAD_REQUEST, "device_id is required");
+        throw new ErrorCustom(StatusCodes.BAD_REQUEST, "device_id is required");
     return await deviceRepository.deleteDeviceById(device_id);
 } 
+exports.getDeviceByExternal_id = async ({external_id}) => {
+    return await deviceRepository.getDeviceByExternal_id(external_id);
+}

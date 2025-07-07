@@ -1,11 +1,11 @@
 const { pool } = require('../config/Connection');
-const ErrorHandling = require('../ErrorHandling/ErrorHandling');
+const ErrorCustom = require('../errorcustom/ErrorCustom');
 const Position = require('../model/Position');
 const { ReasonPhrases, StatusCodes } = require('http-status-codes');
 
 exports.createPosition = async (position) => {
     const check = await this.findPositionByName(position.name);
-    if (check[0]) throw new ErrorHandling(StatusCodes.CONFLICT, "Position name already exists");
+    if (check[0]) throw new ErrorCustom(StatusCodes.CONFLICT, "Position name already exists");
     try {
         const [result] = await pool.query(
             'INSERT INTO positions (name) VALUES (:name)',
@@ -17,8 +17,8 @@ exports.createPosition = async (position) => {
         );
         return rows[0];
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message+'this');
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message+'this');
     }
 };
 
@@ -27,7 +27,7 @@ exports.findPositionByName = async (name) => {
         const [rows] = await pool.query('SELECT id, name FROM positions WHERE name = ?', [name]);
         return rows;
     } catch (error) {
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -39,8 +39,8 @@ exports.findPositionById = async (id) => {
         );
         return rows[0] || null;
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 
@@ -56,8 +56,8 @@ exports.getPositions = async (keyword) => {
         const [rows] = await pool.query(query, params);
         return rows;
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 exports.updatePositionById = async (id, position) => {
@@ -69,7 +69,7 @@ exports.updatePositionById = async (id, position) => {
                 { name: position.name, id }
             );
             if (check[0]) {
-                throw new ErrorHandling(StatusCodes.CONFLICT, "Position name already exists");
+                throw new ErrorCustom(StatusCodes.CONFLICT, "Position name already exists");
             }
         }
 
@@ -80,7 +80,7 @@ exports.updatePositionById = async (id, position) => {
         );
 
         if (result.affectedRows === 0) {
-            throw new ErrorHandling(StatusCodes.NOT_FOUND, "Position not found");
+            throw new ErrorCustom(StatusCodes.NOT_FOUND, "Position not found");
         }
 
         // Trả về thông tin phòng ban sau khi cập nhật
@@ -90,8 +90,8 @@ exports.updatePositionById = async (id, position) => {
         );
         return rows[0];
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };
 exports.deletePositionById = async (id) => {
@@ -101,11 +101,11 @@ exports.deletePositionById = async (id) => {
             { id }
         );
         if (result.affectedRows === 0) {
-            throw new ErrorHandling(StatusCodes.NOT_FOUND, "Position not found");
+            throw new ErrorCustom(StatusCodes.NOT_FOUND, "Position not found");
         }
         return { message: "Position deleted successfully" };
     } catch (error) {
-        if (error instanceof ErrorHandling) throw error
-        throw new ErrorHandling(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+        if (error instanceof ErrorCustom) throw error
+        throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 };

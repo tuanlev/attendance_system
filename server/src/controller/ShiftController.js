@@ -1,12 +1,12 @@
 const ShiftService = require('../service/ShiftService');
 const { StatusCodes } = require('http-status-codes');
-const ErrorHandling = require('../ErrorHandling/ErrorHandling');
+const ErrorCustom = require('../errorcustom/ErrorCustom');
 
 // Thêm shift mới
 exports.addShift = async (req, res, next) => {
     try {
          if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const data = await ShiftService.addShift(req.body);
         res.status(StatusCodes.CREATED).json({
             success: true,
@@ -21,7 +21,7 @@ exports.addShift = async (req, res, next) => {
 exports.getShifts = async (req, res, next) => {
     try {
          if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const data = await ShiftService.getShifts(req.query);
         res.status(StatusCodes.OK).json({
             success: true,
@@ -36,7 +36,7 @@ exports.getShifts = async (req, res, next) => {
 exports.getShiftById = async (req, res, next) => {
     try {
          if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const data = await ShiftService.getShiftById({ shift_id: req.params.shift_id });
         res.status(StatusCodes.OK).json({
             success: true,
@@ -51,7 +51,7 @@ exports.getShiftById = async (req, res, next) => {
 exports.updateShiftById = async (req, res, next) => {
     try {
          if (!req.isAuthenticated || req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const data = await ShiftService.updateShiftById({ shift_id: req.params.shift_id }, req.body);
         res.status(StatusCodes.OK).json({
             success: true,
@@ -67,7 +67,7 @@ exports.updateShiftById = async (req, res, next) => {
 exports.deleteShiftById = async (req, res, next) => {
     try {
          if (!req.isAuthenticated && req.grantedAuthority !=  require("../security/JwtUtils").Option.ADMIN)
-            throw new ErrorHandling(403, "You do not have permission");
+            throw new ErrorCustom(403, "You do not have permission");
         const result = await ShiftService.deleteShiftById({ shift_id: req.params.shift_id });
         res.status(StatusCodes.OK).json({
             success: true,
