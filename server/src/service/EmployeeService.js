@@ -4,8 +4,13 @@ const { StatusCodes } = require('http-status-codes');
 const ErrorCustom = require('../errorcustom/ErrorCustom');
 // done
 exports.createEmployee = async (employee,device_id) => {
-    const query = employeeDTO.employeeQuery({ ...searchParams, device_id:device_id });
+    const query = employeeDTO.employeeQuery({ ...employee, device_id:device_id });
     const created = await employeeRepository.createEmployee(query);
+    return employeeDTO.employeeResponse(created);
+}
+exports.updateEmployeeById = async (id,employee) => {
+    const query = employeeDTO.employeeQuery({ ...employee});
+    const created = await employeeRepository.updateEmployeeByIdAndDevice(id,query);
     return employeeDTO.employeeResponse(created);
 }
 
@@ -52,8 +57,16 @@ exports.deleteEmployeeByExternal_id = async (id) => {
     return await employeeRepository.deleteEmployeeByExternal_id(id);
 }
 //done
-exports.addEmployee = async (employeeQuery, data) => {
+exports.addEmployee = async (employeeQuery) => {
     // employeeQuery sẽ kiểm tra và chuẩn hóa dữ liệu đầu vào
-    const created = await employeeRepository.createEmployee(employeeData);
+    const created = await employeeRepository.createEmployee(employeeDTO.employeeQuery(employeeQuery));
     return employeeDTO.employeeResponse(created);
 };
+exports.addShiftForEmployeeByDepartment = async ({department_id},{shift_id},device_id) => {
+    if (!department_id) throw new Error("department_id is require");
+    await employeeRepository.addShiftForEmployeeByDepartment(department_id,shift_id,device_id)
+}
+exports.addShiftForEmployeeByPosition = async ({position_id},{shift_id},device_id) => {
+    if (!position_id) throw new Error("position_id is require");
+    await employeeRepository.addShiftForEmployeeByPosition(position_id,shift_id,device_id)
+}

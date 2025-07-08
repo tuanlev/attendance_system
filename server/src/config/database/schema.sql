@@ -55,16 +55,18 @@ CREATE TABLE IF NOT EXISTS checkins (
     checkin_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     employee_ex_id VARCHAR(255),
     device_ex_id VARCHAR(255),
-    faceBase64 TEXT
+    faceBase64 TEXT,
+     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 
 );
 
-CREATE TABLE IF NOT EXISTS shift_assignments (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    shift_id INT NOT NULL,
-    employee_id INT,
-    position INT,
-    department INT,
-    start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-end_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+CREATE TABLE IF NOT EXISTS shiftrecords (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  checkin TIMESTAMP,
+  checkout TIMESTAMP,
+  employee_id INT,
+  shift_id INT,
+  checkin_status ENUM('on-time', 'late', 'absent', 'Unassigned'),
+  checkout_status ENUM('on-time', 'early-leave', 'absent', 'Unassigned'),
+  time DATE
+);

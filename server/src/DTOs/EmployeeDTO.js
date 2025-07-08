@@ -62,18 +62,45 @@ exports.employeeQuery = ({
     faceBase64: faceBase64 && faceBase64.toString().trim() !== '' ? faceBase64.toString().trim() : null
   };
 };
+exports.employeeBody = ({
+  external_id,
+  fullname,
+  phone,
+  email,
+  department_id,
+  position_id,
+  shift_id,
+  registered_at,
+  faceBase64
+}) => {
+  if (!external_id || !external_id.toString().trim()) {
+    throw createErrorDto('external_id');
+  }
+
+  return {
+    external_id: external_id.toString().trim(),
+    fullname: fullname && fullname.toString().trim() !== '' ? fullname.toString().trim() : null,
+    phone: phone && phone.toString().trim() !== '' ? phone.toString().trim() : null,
+    email: email && email.toString().trim() !== '' ? email.toString().trim() : null,
+    department_id: (department_id)? department_id : null,
+    position_id: (position_id) ? position_id : null,
+    shift_id: (shift_id)? shift_id : null,
+    registered_at : (registered_at)?registered_at:null,
+    faceBase64: faceBase64 && faceBase64.toString().trim() !== '' ? faceBase64.toString().trim() : null
+  };
+};
 
 
 // Chuẩn hóa dữ liệu tìm kiếm employee (search/filter)
 exports.employeeSearchQuery = ({ department_id, position_id, keyword, shift_id, device_id }) => {
     const query = {};
     if (device_id && device_id.toString().trim()) query.device_id = device_id.toString().trim();
-    if (department_id !== undefined && department_id !== null && department_id !== "")
-        query.department_id = Number(department_id);
-    if (position_id !== undefined && position_id !== null && position_id !== "")
-        query.position_id = Number(position_id);
-    if (shift_id !== undefined && shift_id !== shift_id && shift_id !== "")
-        query.shift_id = Number(shift_id);
+    if (department_id !== undefined && department_id !== null && department_id.toString().trim()  !== "")
+        query.department_id = department_id;
+    if (position_id !== undefined && position_id !== null && position_id.toString().trim()  !== "")
+        query.position_id = position_id;
+    if (shift_id !== undefined && shift_id !== null && shift_id.toString().trim()  !== "")
+        query.shift_id = shift_id;
     if (keyword && keyword.toString().trim())
         query.keyword = keyword.toString().trim();
     return query;

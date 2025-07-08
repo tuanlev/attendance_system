@@ -78,7 +78,7 @@ exports.getEmployees = async (searchParams, device_id) => {
             params.keyword = `%${searchParams.keyword}%`;
         }
         query += ' ORDER BY updated_at DESC';
-
+        console.log(searchParams)
         const [rows] = await pool.query(query, params);
         return rows;
     } catch (error) {
@@ -221,3 +221,41 @@ exports.editEmployee = async (employeeData) => {
     throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
   }
 };
+
+exports.addShiftForEmployeeByDepartment = async(department_id,shift_id,device_id) => {
+    try { 
+    const sql = `
+      UPDATE employees 
+      SET shift_id =:shift_id
+      WHERE department_id = :department_id and device_id =:device_id
+    `;
+
+    const [result] = await pool.query(sql, {department_id,shift_id,device_id});
+
+    if (result.affectedRows === 0) {
+      throw new ErrorCustom(StatusCodes.NOT_FOUND, "Employee not found");
+    }
+
+    return "success"
+    
+  } catch (error) {
+    throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+  }
+}
+exports.addShiftForEmployeeByPosition = async(position_id,shift_id,device_id) => {
+    try { 
+    const sql = `
+      UPDATE employees 
+      SET shift_id =:shift_id
+      WHERE position_id = :position_id and device_id =:device_id
+    `;
+    console.log(shift_id,position_id,device_id)
+    const [result] = await pool.query(sql, {position_id,shift_id,device_id});
+
+   
+    return "success"
+    
+  } catch (error) {
+    throw new ErrorCustom(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+  }
+}
